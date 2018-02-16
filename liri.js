@@ -12,20 +12,26 @@ var client = new Twitter(keys.twitter); // Sets the client tokens/IDs/API keys
 
 // Liri Commands
 // Create a switch statement so the app knows which function to call based on the user input
-switch(liriRequest) {
-    // if "my-tweets" is input by the user after liri.js the myTweets function will execute and so on for the cases below
-    case "my-tweets": myTweets(); break;
-    case "spotify-this-song": spotifyThisSong(); break;
-    case "movie-this": movieThis(); break;
-    case "do-what-it-says": doWhatItSays(); break;
 
-    // Instructions will be shown if the app is run without a liriRequest
-    default: console.log("Use one of the following commands after 'node liri.js':");
-    console.log("1. 'my-tweets' to view my last 20 Tweets");
-    console.log("2. spotify-this-song 'any song name'");
-    console.log("3. movie-this 'any movie name'");
-    console.log("If the movie or song is more than one word put it in quotation marks for better results.");
-}    
+function liriSwitch(){
+
+    switch(liriRequest) {
+        // if "my-tweets" is input by the user after liri.js the myTweets function will execute and so on for the cases below
+        case "my-tweets": myTweets(); break;
+        case "spotify-this-song": spotifyThisSong(); break;
+        case "movie-this": movieThis(); break;
+        case "do-what-it-says": doWhatItSays(); break;
+
+        // Instructions will be shown if the app is run without a liriRequest
+        default: console.log("Use one of the following commands after 'node liri.js':");
+        console.log("1. 'my-tweets' to view my last 20 Tweets");
+        console.log("2. spotify-this-song 'any song name'");
+        console.log("3. movie-this 'any movie name'");
+        console.log("If the movie or song is more than one word put it in quotation marks.");
+    }
+};
+
+liriSwitch();
 
 // Twitter Function ===================================================================================
 
@@ -52,7 +58,7 @@ function myTweets() {
 
 // Spotify Function ===================================================================================
 
-function spotifyThisSong(songTitle){    
+function spotifyThisSong(){    
     // Song title is stored in this variable
     var songTitle = process.argv[3];
     // If no song title is provided it will use 'The Sign' as the default song.
@@ -87,7 +93,7 @@ function spotifyThisSong(songTitle){
 
 // OMDB Function ===================================================================================
 
-function movieThis(movieTitle){
+function movieThis(){
 
     // Grabs the movie name and stores it in a variable called "movieTitle"
     var movieTitle = process.argv[3];
@@ -140,20 +146,11 @@ function doWhatItSays(){
         else {
             var splitData = data.split(",");
 
-            console.log(splitData[0]);
-            console.log(splitData[1]);
-
-            var liriRequest = splitData[0];
-            var songTitle = splitData[1];
-
-            console.log(liriRequest);
-            console.log(songTitle);
-
-            switch(liriRequest) {
-                case "spotify-this-song": spotifyThisSong(songTitle); break;
-            }
+            liriRequest = splitData[0];
+            process.argv[3] = splitData[1];
+            
+            liriSwitch();
         }
 
-    
     })
 };
